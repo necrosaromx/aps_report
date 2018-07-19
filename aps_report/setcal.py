@@ -12,14 +12,14 @@ def set_year(driver, year_to_set):
     logging.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INTENTANDO COLOCAR EL AÑO %s", year_to_set)
     title = driver.find_element_by_xpath("//div[@id='caltitle']").get_attribute("innerHTML")
     selected_year = title.split()[1]
-    if int(selected_year) > year_to_set:
-        while int(selected_year) != year_to_set: 
+    if int(selected_year) > int(year_to_set):
+        while int(selected_year) != int(year_to_set): 
             logging.debug("While IZQ: Click hacia la izquierda")
             driver.find_element_by_id("calprev").click()
             selected_year = driver.find_element_by_xpath("//div[@id='caltitle']").get_attribute("innerHTML").split()[1]
             logging.debug("WHILE IZQ: Año confugurado despues de click %s", int(selected_year))
-    elif int(selected_year) < year_to_set:
-        while int(selected_year) != year_to_set: 
+    elif int(selected_year) < int(year_to_set):
+        while int(selected_year) != int(year_to_set): 
             logging.debug("While DER: Click hacia la Derecha")
             driver.find_element_by_id("calnext").click()
             selected_year = driver.find_element_by_xpath("//div[@id='caltitle']").get_attribute("innerHTML").split()[1]
@@ -103,9 +103,7 @@ def set_cal(driver, fechas):
     logging.debug("Configurando calendario From, esto debe abrir el calendario from")
     driver.find_element_by_xpath("//input[@name='time_start']").click()
 
-    #Si vienen los años, hay que configurarlos, de otra manera se dejan los que estan
-    if not (year_ini is None):    
-        set_year(driver, year_ini)
+    set_year(driver, year_ini)
     set_month(driver, mes_ini)
     set_day(driver, dia_ini)
     set_hour(driver, hora_ini, minuto_ini, start_meridian)
@@ -114,8 +112,7 @@ def set_cal(driver, fechas):
     logging.debug("intentado abrir calendario TO")
     driver.find_element_by_xpath("//input[@name='time_end']").click()
 
-    if not (year_fin is None):    
-        set_year(driver, year_fin)
+    set_year(driver, year_fin)
     set_month(driver, mes_fin)
     set_day(driver, dia_fin)
     set_hour(driver, hora_fin, minuto_fin, end_meridian)
