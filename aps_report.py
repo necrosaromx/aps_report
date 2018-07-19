@@ -42,9 +42,13 @@ def main():
     
     logging.debug(configuracion)
     fechas = calcdates.start(configuracion) 
-    #fechas = calcdates.start(configuracion['cortemat'], 
-    #                         configuracion['cortemd'], 
-    #                         configuracion['cortevsp'])
+    #Seobre escribimos los argumentos leidos de CLI a los calculados
+    fechas.update(args)
+    marciales = { 
+                 'marcial_ini': calcdates.to_martial(fechas['hora_ini'], fechas['start_meridian']), 
+                 'marcial_fin': calcdates.to_martial(fechas['hora_fin'], fechas['end_meridian'])
+                }
+    fechas.update(marciales)
     logging.debug(fechas)
     logging.info("Hoy es %s", fechas['ahora'])
     #Se planchan las fechas de linea de comando si es que fueron introducidas
@@ -109,7 +113,6 @@ def main():
     
     #Genera el archivo .docx
     logging.info("Generando reporte final...")
-    anio = str(fechas['current_year'])
     reporte = 'Reporte_Pravail_APS_' + str(fechas['marcial_fin']) + '_Horas_' + configuracion['hostname'] + '_' + str(fechas['dia_fin']) + str(fechas['mes_fin']) + str(fechas['year_fin']) + '.docx'
     gendocx.generadoc(configuracion, 
             reporte,
