@@ -92,54 +92,29 @@ def main():
                                 p_group.get_attribute("innerHTML"), 
                                 p_group.get_attribute("href")
                                ])
-    #driver.close() 
-    
-    #Arrancando el loop para lanzar los threads
-    #threads = []
     logging.info("Limpiando directorio de salida")
     try:
         os.remove(join(configuracion['output_dir'], 'Arbor_Networks_APS-View_Protection_Group.pdf'))
     except:
         pass
     for gp_url in tqdm(view_groups, desc="Descargando PDFs", unit="pdf"):
-        #Crea el directorio de slaida si no existe"
-        #setoutput.checkmkdir('output/' + gp_url[0])
         hilo = descargapdf.descargapdf(driver, 
                                        gp_url,
                                        fechas,
                                        configuracion) 
-#                                       fechas['mes_ini'], 
-#                                       fechas['mes_fin'], 
-#                                       fechas['dia_ini'], 
-#                                       fechas['dia_fin'], 
-#                                       fechas['hora_ini'],
-#                                       fechas['hora_fin'], 
-#                                       fechas['start_meridian'], 
-#                                       fechas['end_meridian'], 
-#                                       configuracion['endpoint'], 
-#                                       configuracion['output_dir'], 
-#                                       configuracion['pdf_timeout'])
+
         hilo.start()
         hilo.join()
-        #threads.append(hilo)
-
-    #Esprando que los hilos terminen
-    #for t in threads:
-        #t.join()
     driver.close()
+    
     #Genera el archivo .docx
     logging.info("Generando reporte final...")
     anio = str(fechas['current_year'])
     reporte = 'Reporte_Pravail_APS_' + str(fechas['marcial_fin']) + '_Horas_' + configuracion['hostname'] + '_' + str(fechas['dia_fin']) + str(fechas['mes_fin']) + str(fechas['year_fin']) + '.docx'
     gendocx.generadoc(configuracion, 
             reporte,
-            #configuracion['output_dir'],
-            #configuracion['hostname'],
             view_groups,
             fechas
-            #str(fechas['dia_ini']) + '/' + str(fechas['mes_ini']) + '/' + anio + '  ' + str(fechas['marcial_ini']) + ':00 HORAS',
-            #str(fechas['dia_fin']) + '/' + str(fechas['mes_fin']) + '/' + anio + '  ' + str(fechas['marcial_fin']) + ':00 HORAS',
-            #configuracion['guardapdf']
             )
     logging.info("Se completo la generacion del reporte %s", reporte)
 
