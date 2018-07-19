@@ -105,3 +105,15 @@ def mestotext(mes):
         return meses[str(mes)]
     elif meses_inv.get(str(int(mes))) != None:
         return meses_inv[str(int(mes))]
+
+def to_martial(hora, meridian):
+    """
+        Regresa la hora en formato militar
+    """
+    if meridian == 'PM':
+        if int(hora) < 12:
+            return hora + 12
+        else:
+            return hora
+    else:
+        return hora
